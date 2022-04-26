@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "eucalypto-group",
+  "private_key_id": "c5272aa8af7f04f698f4121a48eecf7ed2ba40ec",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCeV7pza5FIfVio\ns1tIGii/ZIrwRHfPAoc96bwrhLsjzurSxg7ahFzCMZLP3omy5+xMl9fGIiTbvjJB\n0fBYntpu0froNaKKiUXJnZj0zFQmTtL/P4yCNndS4YNuPMp1MEOWrXYE/YWmUUqH\niAtoKmXHB7F2W/xLZfPeN7JDMohmYNTO31yCq3ybYvQvncHTjGLmCuRI20m0W66l\nvvEELmajMDgRGijJfAIKlh8ti4ZmDVIpxHRVEVPrLykx3CVEowKXmBSa8yxdpbZv\nF5JCjPEVURyjUuwZ6HmvoxroCmWuhwFu35ShIeE7yjiMCVKH57SerH5Lx0FrjGaA\nhYiareF5AgMBAAECggEAAU7ZdxJeh/4kFTmtEXyI1WLp3Gf+Yt8DGb10bNoa9yXi\njfTtoru47fA9pZqxocEVdEEFWulFi2yn6uAGd57xUDzLES+/PNx7L3oOLUiCUfIw\n/0OJwDodtHkxLiARrpPkXQpoCQzElb4CavnyWS0Pe+xJ+J+0JvXLxMxKPFCerJTR\nHOX6egAT6xeAuCACfSy6+//+K6v7/1w9yjBDNahOcIhlyQmNMlEaPJlgCFIP2c/6\nK9VldYoAQ5xcasbFaohi/gIXuU7K74bU1BMvi7fN31WFXdWry2tHyU4PLA8HMr5+\nSdsYmm6U4bgDbj6PGT4X5LR6H7m90PJp5N+GlXMOkQKBgQDSHRG85TB+76D8W4QH\nPUCzW0eXn2gEn43nQtLEx4zKayk7Ri9yW8ORCJkXlRH5rQy9khWcK8mXNgQXXnW1\nHgj4EsPMB6mwc82fG1fRn5qll4/p0MCphUjroVUSpDHGuE76i37Oo72753IlAw6M\nzIRHHbQz6+pUHVM/kIvdFqQrMQKBgQDA7EcXjo8ven+PYctL920BxYca7sVKtf+n\nnnq7b6Jzc2Pu7tBblOLqUmHs2FOjmRsRo0ujwyi9L9Gf+fffbVR1Uaj3HIecRbDp\nU2M/0zDoTOwTYsdlluSdcWKNy4Y4VqcizLwdooNEGe9iFkEgf6gqgr7MrC1LjdVz\npKZJs9l4yQKBgQDReOurL68mjc4oaTB6ayWq6jC4x9JS8aLuUR+B0RPa5fUIRBOf\nZj7VxAWkjhiKm2ydPhvPQ5RJ7S8tAR5Gf/gfIc4UBfu1j+4KVp85vG3X8v8l8tlw\n6BFn4MLIv+tkG3GZtSKp7nKE99xDbAXAd1DU+ZcjQGqwiz/omjnmI+FtsQKBgQCV\nKVoiJZAhpnXf9z3HA4vdlcrLERerlyIOiGLebwbMesgmYbDpTilQANhD1lJ8qBEc\nxwPhny/tbn6GUS/MKOznNHcOcJmNQvjwvg97tp8WzPquVm5S5qLl9Fe9yEGDZ8Qc\nDO3Zf+A8FE1Yqlo6dVkhXSuGdg0jYItLuV70l0CquQKBgEB1Dv/DJhXDDfcCXmJ4\nQcL0SKyzvqjNxMnaSeIkyM1Q9wtrWgdFtQnQiYFqCqeN7wGSs+Fgn8/LryhuA2vR\nNzbVRU0vRKmU2Rlkl8vUiHcdonyPhyIgb+CXDU9auSSgG5wtWIVcgTue+uCBHVKd\nSVhg4Z+qhTblqId5hY0u4TyV\n-----END PRIVATE KEY-----\n",
+  "client_email": "nestapi@eucalypto-group.iam.gserviceaccount.com",
+  "client_id": "104653492577419338406",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nestapi%40eucalypto-group.iam.gserviceaccount.com"
+}

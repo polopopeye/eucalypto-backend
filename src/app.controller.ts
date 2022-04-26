@@ -1,12 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Redirect, Req } from '@nestjs/common';
+import { Request } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Redirect('/docs', 302)
+  redirectToDocs() {
+    return;
+  }
+
+  @Get('/hello')
+  getHello(@Req() request: Request): string {
+    return 'Hello  2' + request['user']?.email + '!';
   }
 }
