@@ -6,6 +6,7 @@ import { FirestoreModule } from './firestore/firestore.module';
 
 import { EventsModule } from './events/events.modules';
 import { OffersModule } from './offers/offers.modules';
+import { CategoriesModule } from './categories/categories.modules';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { OffersModule } from './offers/offers.modules';
     }),
     EventsModule,
     OffersModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
