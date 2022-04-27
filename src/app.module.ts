@@ -7,6 +7,7 @@ import { OffersModule } from './offers/offers.modules';
 import { CategoriesModule } from './categories/categories.modules';
 import { CompaniesModule } from './companies/companies.modules';
 import { CommunityModule } from './community/community.module';
+import { UsersModule } from './users/users.modules';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CommunityModule } from './community/community.module';
     OffersModule,
     CategoriesModule,
     CompaniesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [],
