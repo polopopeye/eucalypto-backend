@@ -1,5 +1,4 @@
-import { Controller, Get, Redirect, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, Redirect } from '@nestjs/common';
 
 @Controller()
 export class AppController {
@@ -7,10 +6,5 @@ export class AppController {
   @Redirect('/docs', 302)
   redirectToDocs() {
     return;
-  }
-
-  @Get('/hello')
-  getHello(): string {
-    return 'Hello !';
   }
 }
