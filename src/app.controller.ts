@@ -10,7 +10,7 @@ export class AppController {
   }
 
   @Get('/hello')
-  getHello(@Req() request: Request): string {
-    return 'Hello  2' + request['user']?.email + '!';
+  getHello(): string {
+    return 'Hello !';
   }
 }

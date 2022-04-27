@@ -3,11 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { FirestoreModule } from './firestore/firestore.module';
-// import { TodosModule } from './todos/todos.module';
-import { TodoDto } from './todos/dtos/todo.document';
-import { TodoService } from './todos/services/todo.service';
-import { TodoController } from './todos/controllers/todo.controllers';
-// TodoDocument
+
+import { OffersController } from './offers/controllers/offers.controllers';
+import { OffersService } from './offers/services/offers.service';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,7 +21,7 @@ import { TodoController } from './todos/controllers/todo.controllers';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AppController, TodoController],
-  providers: [AppService, TodoService],
+  controllers: [AppController, OffersController],
+  providers: [AppService, OffersService],
 })
 export class AppModule {}
