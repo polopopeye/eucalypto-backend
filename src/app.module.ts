@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { FirestoreModule } from './firestore/firestore.module';
 
-import { EventsModule } from './events/events.modules';
 import { OffersModule } from './offers/offers.modules';
 import { CategoriesModule } from './categories/categories.modules';
+import { CompaniesModule } from './companies/companies.modules';
+import { CommunityModule } from './community/community.module';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { CategoriesModule } from './categories/categories.modules';
       }),
       inject: [ConfigService],
     }),
-    EventsModule,
+    CommunityModule,
     OffersModule,
     CategoriesModule,
+    CompaniesModule,
   ],
   controllers: [AppController],
   providers: [],
