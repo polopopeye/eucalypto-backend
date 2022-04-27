@@ -11,8 +11,6 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateOffersDto, UpdateOffersDto } from '../dtos/offers.dtos';
 import { OffersService } from '../services/offers.service';
 
-// import { TodoService } from '../services/todo.service';
-
 @ApiTags('JobOffers')
 @Controller('job-offers')
 export class OffersController {

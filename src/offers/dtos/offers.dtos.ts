@@ -1,13 +1,6 @@
 import { Timestamp } from '@google-cloud/firestore';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {
-  IsString,
-  IsUrl,
-  IsNotEmpty,
-  IsBoolean,
-  IsOptional,
-  IsEmpty,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 
 export class CreateOffersDto {
   static collectionName = 'offers';

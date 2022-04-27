@@ -4,8 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { FirestoreModule } from './firestore/firestore.module';
 
-import { OffersController } from './offers/controllers/offers.controllers';
-import { OffersService } from './offers/services/offers.service';
+import { EventsModule } from './events/events.modules';
+import { OffersModule } from './offers/offers.modules';
 
 @Module({
   imports: [
@@ -15,13 +15,17 @@ import { OffersService } from './offers/services/offers.service';
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        projectId: 'eucalypto-group',
-        keyFilename: './gcred.json',
+        projectId: configService.get<string>('GOOGLE_PROJECT_ID'),
+        keyFilename: configService.get<string>(
+          'GOOGLE_APPLICATION_CREDENTIALS',
+        ),
       }),
       inject: [ConfigService],
     }),
+    EventsModule,
+    OffersModule,
   ],
-  controllers: [AppController, OffersController],
-  providers: [AppService, OffersService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

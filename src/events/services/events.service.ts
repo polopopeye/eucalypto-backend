@@ -1,23 +1,23 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CollectionReference } from '@google-cloud/firestore';
 import {
-  CreateOffersDto,
-  GetOffersDto,
-  UpdateOffersDto,
-} from '../dtos/offers.dtos';
+  CreateEventsDto,
+  GetEventsDto,
+  UpdateEventsDto,
+} from '../dtos/events.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
 
 @Injectable()
-export class OffersService {
+export class EventsService {
   constructor(
-    @Inject(CreateOffersDto.collectionName)
-    private collection: CollectionReference<CreateOffersDto>,
+    @Inject(CreateEventsDto.collectionName)
+    private collection: CollectionReference<CreateEventsDto>,
   ) {}
 
-  async create(Offers): Promise<CreateOffersDto> {
-    const offer: GetOffersDto = {
-      ...Offers,
-      aplicants: [],
+  async create(events): Promise<CreateEventsDto> {
+    const offer: GetEventsDto = {
+      ...events,
+      assistants: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -61,7 +61,7 @@ export class OffersService {
     }
   }
 
-  async update(id: string, changes: UpdateOffersDto): Promise<any> {
+  async update(id: string, changes: UpdateEventsDto): Promise<any> {
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -79,7 +79,7 @@ export class OffersService {
       const offerDoc = await docRef.get();
       return offerDoc.data();
     }
-    return '🚀 ~ file: offers.service ~ line 89 ~ OffersService ~ update ~ Error';
+    return '🚀 ~ file: offers.service ~ line 89 ~ EventsService ~ update ~ Error';
   }
 
   async delete(id: string): Promise<any> {
@@ -87,7 +87,7 @@ export class OffersService {
       return await this.collection.doc(id).delete();
     } else {
       return (
-        '🚀 ~ file: offers.service.ts ~ line 92 ~ OffersService ~ delete ~ id' +
+        '🚀 ~ file: offers.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
         id
       );
     }
