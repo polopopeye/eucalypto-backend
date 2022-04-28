@@ -7,11 +7,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @ApiProperty({ description: `Name of the user` })
-  name: string;
-
-  @IsOptional()
-  @ApiProperty({ description: `Surnames of the user` })
-  surnames: string;
+  completeName: string;
 
   @IsNotEmpty()
   @ApiProperty({ description: `Displayname of the user` })
@@ -21,7 +17,7 @@ export class CreateUserDto {
   @ApiProperty({ description: `Langs of the user` })
   languages: Array<string>;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({ description: `Techs/cats of the user` })
   categories: Array<string>;
 
@@ -45,7 +41,7 @@ export class CreateUserDto {
   @ApiProperty({ description: `LinkedIn of the user` })
   linkedIn: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({ description: `email of the user` })
   email: string;
 
@@ -57,7 +53,7 @@ export class CreateUserDto {
   @ApiProperty({ description: `github of the user` })
   github: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({ description: `location of the user` })
   location: string;
 

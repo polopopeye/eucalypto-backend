@@ -10,17 +10,25 @@ export class UsersService {
     private collection: CollectionReference<CreateUserDto>,
   ) {}
 
-  async create(events): Promise<CreateUserDto> {
-    const offer: GetUserDto = {
-      ...events,
+  async create(queryUser): Promise<any> {
+    const snapshot = await this.collection
+      .where('email', '==', queryUser.email)
+      .get();
+    if (!snapshot.empty) {
+      console.log('queryUser already exists' + queryUser.email);
+      return { alreadyExists: true };
+    }
+
+    const user: GetUserDto = {
+      ...queryUser,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
     const docRef = this.collection.doc();
-    await docRef.set(offer);
-    const offerDoc = await docRef.get();
-    return offerDoc.data();
+    await docRef.set(user);
+    const userDoc = await docRef.get();
+    return userDoc.data();
   }
 
   async findAll(): Promise<any[]> {
