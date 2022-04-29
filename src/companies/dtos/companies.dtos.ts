@@ -38,6 +38,10 @@ export class CreateCompanyDto {
   country: string;
 
   @IsNotEmpty()
+  @ApiProperty({ description: `Owners of the company` })
+  owners: Array<string>;
+
+  @IsNotEmpty()
   @ApiProperty({ description: `Is this  company published?` })
   published: boolean;
 }

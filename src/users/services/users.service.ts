@@ -76,13 +76,26 @@ export class UsersService {
     };
 
     const docRef = await searchById();
+    const doc = await docRef.get();
+    const data = doc.data();
 
     if (docRef && Object.keys(changes).length !== 0) {
-      await docRef.update(changes);
+      const updateChanges = {
+        ...changes,
+        updatedAt: new Date(),
+      };
+
+      await docRef.update(updateChanges);
       const offerDoc = await docRef.get();
       return offerDoc.data();
+    } else {
+      return {
+        error:
+          '🚀 ~ file: companies.service ~ line 89 ~ EventsService ~ update ~ Error',
+        changes,
+        data,
+      };
     }
-    return '🚀 ~ file: companies.service ~ line 89 ~ EventsService ~ update ~ Error';
   }
 
   async delete(id: string): Promise<any> {

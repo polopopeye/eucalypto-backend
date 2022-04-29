@@ -5,6 +5,9 @@ import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 export class CreateUserDto {
   static collectionName = 'users';
 
+  @IsOptional()
+  id: string;
+
   @IsNotEmpty()
   @ApiProperty({ description: `Name of the user` })
   completeName: string;

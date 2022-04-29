@@ -14,9 +14,9 @@ export class CompaniesService {
     private collection: CollectionReference<CreateCompanyDto>,
   ) {}
 
-  async create(events): Promise<CreateCompanyDto> {
+  async create(company): Promise<CreateCompanyDto> {
     const offer: GetCompanyDto = {
-      ...events,
+      ...company,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -78,7 +78,7 @@ export class CompaniesService {
       const offerDoc = await docRef.get();
       return offerDoc.data();
     }
-    return '🚀 ~ file: companies.service ~ line 89 ~ EventsService ~ update ~ Error';
+    return '🚀 ~ file: companies.service ~ line 89 ~ companyService ~ update ~ Error';
   }
 
   async delete(id: string): Promise<any> {
@@ -86,7 +86,7 @@ export class CompaniesService {
       return await this.collection.doc(id).delete();
     } else {
       return (
-        '🚀 ~ file: companies.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
+        '🚀 ~ file: companies.service.ts ~ line 92 ~ companyService ~ delete ~ id' +
         id
       );
     }
