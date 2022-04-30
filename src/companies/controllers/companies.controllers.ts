@@ -34,6 +34,12 @@ export class CompaniesController {
     return this.companiesService.findBy(prop, value);
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Find All Companies by owner id' })
+  findByOwner(@Param('id') id: string) {
+    return this.companiesService.findByOwner(id);
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Update Company' })
   update(@Param('id') id: string, @Body() body: UpdateCompanyDto) {

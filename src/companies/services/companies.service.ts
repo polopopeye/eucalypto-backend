@@ -60,6 +60,17 @@ export class CompaniesService {
     }
   }
 
+  async findByOwner(id: string): Promise<any> {
+    const snapshot = await this.collection
+      .where('owners', 'array-contains', id)
+      .get();
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return;
+    }
+    return getDataFromQuerySnapsshot(snapshot);
+  }
+
   async update(id: string, changes: UpdateCompanyDto): Promise<any> {
     const searchById = async () => {
       const doc = this.collection.doc(id);

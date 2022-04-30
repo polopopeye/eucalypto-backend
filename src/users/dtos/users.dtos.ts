@@ -60,6 +60,10 @@ export class CreateUserDto {
   @ApiProperty({ description: `location of the user` })
   location: string;
 
+  @IsOptional()
+  @ApiProperty({ description: `curriculum of the user` })
+  curriculum: string;
+
   @IsNotEmpty()
   @ApiProperty({ description: `Is this  user published?` })
   published: boolean;
