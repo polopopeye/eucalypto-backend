@@ -91,7 +91,7 @@ export class UsersService {
     } else {
       return {
         error:
-          '🚀 ~ file: companies.service ~ line 89 ~ EventsService ~ update ~ Error',
+          '🚀 ~ file: users.service ~ line 89 ~ EventsService ~ update ~ Error',
         changes,
         data,
       };
@@ -103,7 +103,7 @@ export class UsersService {
       return await this.collection.doc(id).delete();
     } else {
       return (
-        '🚀 ~ file: companies.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
+        '🚀 ~ file: users.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
         id
       );
     }

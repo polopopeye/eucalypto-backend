@@ -5,6 +5,9 @@ import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 export class CreateArticlesDto {
   static collectionName = 'articles';
 
+  @IsOptional()
+  id: string;
+
   @IsNotEmpty()
   @ApiProperty({ description: `Name of the article` })
   name: string;

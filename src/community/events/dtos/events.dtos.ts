@@ -5,6 +5,9 @@ import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 export class CreateEventsDto {
   static collectionName = 'events';
 
+  @IsOptional()
+  id: string;
+
   @IsNotEmpty()
   @ApiProperty({ description: `Name of the event` })
   name: string;

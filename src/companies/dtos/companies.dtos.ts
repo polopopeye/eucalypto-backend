@@ -5,6 +5,9 @@ import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 export class CreateCompanyDto {
   static collectionName = 'companies';
 
+  @IsOptional()
+  id: string;
+
   @IsNotEmpty()
   @ApiProperty({ description: `Name of the company` })
   name: string;
