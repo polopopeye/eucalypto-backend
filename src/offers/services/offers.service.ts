@@ -46,7 +46,10 @@ export class OffersService {
     const searchByProp = async () => {
       value = value === 'true' ? true : value;
 
-      const snapshot = await this.collection.where(prop, '==', value).get();
+      const snapshot =
+        prop === 'categories' || prop === 'aplicants'
+          ? await this.collection.where(prop, 'array-contains', value).get()
+          : await this.collection.where(prop, '==', value).get();
       if (snapshot.empty) {
         console.log('No matching documents.');
         return;
@@ -61,7 +64,7 @@ export class OffersService {
     }
   }
 
-  async update(id: string, changes: UpdateOffersDto): Promise<any> {
+  async update(id: string, changes: any): Promise<any> {
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -75,6 +78,10 @@ export class OffersService {
     const docRef = await searchById();
 
     if (docRef && Object.keys(changes).length !== 0) {
+      console.log(
+        '🚀 ~ file: offers.service.ts ~ line 81 ~ OffersService ~ update ~ changes',
+        changes,
+      );
       await docRef.update(changes);
       const offerDoc = await docRef.get();
       return offerDoc.data();

@@ -4,6 +4,8 @@ import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 
 export class CreateOffersDto {
   static collectionName = 'offers';
+  @IsOptional()
+  id: string;
 
   @IsNotEmpty()
   @ApiProperty({ description: `Page Offer tittle` })
@@ -37,9 +39,9 @@ export class CreateOffersDto {
   @ApiProperty({ description: `Techs/Categories of the job offer` })
   categories: Array<string>;
 
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({ description: `Date of deadline` })
-  endTime: Timestamp;
+  deadLine: string;
 
   @IsOptional()
   @ApiProperty({ description: `Is this  job published?` })
