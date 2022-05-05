@@ -51,7 +51,7 @@ export class CreateOffersDto {
 export class GetOffersDto extends CreateOffersDto {
   @IsOptional()
   @ApiProperty({ description: `Applicants list` })
-  aplicants: Array<string>;
+  applicants: Array<string>;
 
   @IsEmpty()
   @ApiProperty({ description: `Date of creation` })

@@ -36,7 +36,7 @@ export class CompaniesService {
     const searchById = async () => {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
-        return docRef.data();
+        return { id: docRef.id, ...docRef.data() };
       } else {
         return false;
       }

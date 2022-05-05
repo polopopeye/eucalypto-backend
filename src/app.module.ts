@@ -8,6 +8,7 @@ import { CategoriesModule } from './categories/categories.modules';
 import { CompaniesModule } from './companies/companies.modules';
 import { CommunityModule } from './community/community.module';
 import { UsersModule } from './users/users.modules';
+import { StatusOffersModule } from './offers/statusJobOffers/statusOffers.modules';
 
 @Module({
   imports: [

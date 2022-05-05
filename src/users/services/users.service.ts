@@ -40,7 +40,7 @@ export class UsersService {
     const searchById = async () => {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
-        return docRef.data();
+        return { id: docRef.id, ...docRef.data() };
       } else {
         return false;
       }
@@ -64,7 +64,7 @@ export class UsersService {
     }
   }
 
-  async update(id: string, changes: UpdateUserDto): Promise<any> {
+  async update(id: string, changes: any): Promise<any> {
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -79,7 +79,7 @@ export class UsersService {
     const doc = await docRef.get();
     const data = doc.data();
 
-    if (docRef && Object.keys(changes).length !== 0) {
+    if (docRef && changes) {
       const updateChanges = {
         ...changes,
         updatedAt: new Date(),

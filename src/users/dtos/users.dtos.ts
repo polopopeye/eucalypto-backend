@@ -30,7 +30,10 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiProperty({ description: `job offers data` })
-  jobOffers: Array<object>;
+  jobOffers: Array<{
+    id: string;
+    status: Array<string>;
+  }>;
 
   @IsNotEmpty()
   @ApiProperty({ description: `Cover Image/Profile Photo of the user` })

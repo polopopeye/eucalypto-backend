@@ -17,7 +17,7 @@ export class OffersService {
   async create(Offers): Promise<CreateOffersDto> {
     const offer: GetOffersDto = {
       ...Offers,
-      aplicants: [],
+      applicants: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -37,7 +37,7 @@ export class OffersService {
     const searchById = async () => {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
-        return docRef.data();
+        return { id: docRef.id, ...docRef.data() };
       } else {
         return false;
       }
@@ -47,7 +47,7 @@ export class OffersService {
       value = value === 'true' ? true : value;
 
       const snapshot =
-        prop === 'categories' || prop === 'aplicants'
+        prop === 'categories' || prop === 'applicants'
           ? await this.collection.where(prop, 'array-contains', value).get()
           : await this.collection.where(prop, '==', value).get();
       if (snapshot.empty) {
@@ -82,6 +82,7 @@ export class OffersService {
         '🚀 ~ file: offers.service.ts ~ line 81 ~ OffersService ~ update ~ changes',
         changes,
       );
+
       await docRef.update(changes);
       const offerDoc = await docRef.get();
       return offerDoc.data();

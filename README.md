@@ -1,3 +1,10 @@
+## Create new endpoint
+
+Just follow the structure of dtos, controllers, and services.
+you have to get a module to save in another module as import, it can be the root or child of other modules.
+
+If you have everything the last thing is to include the collection name in the firestore.providers.ts file.
+
 ## Deploy
 
 heroku login => eucalypto account
