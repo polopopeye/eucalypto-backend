@@ -8,10 +8,6 @@ export class CreateOffersDto {
   id: string;
 
   @IsNotEmpty()
-  @ApiProperty({ description: `Page Offer tittle` })
-  name: string;
-
-  @IsNotEmpty()
   @ApiProperty({ description: `Company Name of the offer job` })
   company: string;
 

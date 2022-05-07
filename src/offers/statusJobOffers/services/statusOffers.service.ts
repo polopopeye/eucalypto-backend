@@ -39,7 +39,11 @@ export class StatusOffersService {
       .get();
 
     if (snapshot.empty) {
-      console.log('No matching documents.');
+      console.log(
+        '🚀 ~ file: statusOffers.service.ts ~ line 42 ~ StatusOffersService ~ findBy ~ snapshot.empty',
+        snapshot.empty,
+      );
+
       return;
     }
     return getDataFromQuerySnapsshot(snapshot);
@@ -118,6 +122,17 @@ export class StatusOffersService {
     } else {
       return (
         '🚀 ~ file: offers.service.ts ~ line 92 ~ StatusOffersService ~ delete ~ id' +
+        id
+      );
+    }
+  }
+
+  async deleteById(id: string): Promise<any> {
+    if (id) {
+      return await this.collection.doc(id).delete();
+    } else {
+      return (
+        '🚀 ~ file: users.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
         id
       );
     }

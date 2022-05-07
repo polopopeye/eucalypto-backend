@@ -43,8 +43,14 @@ export class StatusOffersController {
     return this.statusOffersService.update(id, body);
   }
 
+  @Delete(':id/')
+  @ApiOperation({ summary: 'Delete status job offer by id' })
+  deleteById(@Param('id') id: string) {
+    return this.statusOffersService.deleteById(id);
+  }
+
   @Delete(':id/:idJobOffer')
-  @ApiOperation({ summary: 'Delete  status job offer' })
+  @ApiOperation({ summary: 'Delete all status job offer By UserID and JobID' })
   delete(@Param('id') id: string, @Param('idJobOffer') idJobOffer: string) {
     return this.statusOffersService.delete(id, idJobOffer);
   }
