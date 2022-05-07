@@ -16,6 +16,10 @@ export class CreateOffersDto {
   job: string;
 
   @IsNotEmpty()
+  @ApiProperty({ description: `Job Offer tittle` })
+  fulltime: string;
+
+  @IsNotEmpty()
   @ApiProperty({ description: `Location name of the offer` })
   location: string;
 
