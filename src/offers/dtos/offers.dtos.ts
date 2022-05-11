@@ -44,6 +44,18 @@ export class CreateOffersDto {
   deadLine: string;
 
   @IsOptional()
+  @ApiProperty({ description: `Technologies Field Data` })
+  technologies: any;
+  // technologies: Array<Map<string, string | number>>;
+  // technologies: [
+  //   {
+  //     id: string;
+  //     name: string;
+  //     value: string | number;
+  //   },
+  // ];
+
+  @IsOptional()
   @ApiProperty({ description: `Is this  job published?` })
   published: boolean;
 }
