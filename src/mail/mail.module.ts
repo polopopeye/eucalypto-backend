@@ -5,6 +5,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 import { join } from 'path';
+import { MailController } from './mail.controllers';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { join } from 'path';
         ignoreTLS: true,
         secure: true,
         auth: {
-          user: process.env.EMAIL_ID,
-          pass: process.env.EMAIL_PASS,
+          user: 'ksuarez@eucalyptogroup.com',
+          pass: '@ elmerca69.K',
         },
       },
       defaults: {
@@ -33,6 +34,7 @@ import { join } from 'path';
       },
     }),
   ],
+  controllers: [MailController],
   providers: [MailService],
   exports: [MailService],
 })

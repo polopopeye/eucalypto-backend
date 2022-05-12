@@ -6,6 +6,7 @@ import {
   StatusUpdateOffersDto,
 } from '../dtos/statusOffers.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class StatusOffersService {
