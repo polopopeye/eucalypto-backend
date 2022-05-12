@@ -9,6 +9,7 @@ import { CompaniesModule } from './companies/companies.modules';
 import { CommunityModule } from './community/community.module';
 import { UsersModule } from './users/users.modules';
 import { StatusOffersModule } from './offers/statusJobOffers/statusOffers.modules';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { StatusOffersModule } from './offers/statusJobOffers/statusOffers.module
     CategoriesModule,
     CompaniesModule,
     UsersModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [],
