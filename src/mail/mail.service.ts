@@ -32,8 +32,8 @@ export class MailService {
         'ksuarez@eucalyptogroup.com',
         'kenneth7e7a@gmail.com',
         'kennethsuarez33@gmail.com',
-        // 'amartinez@eucalyptogroup.com', TODO: DISCOMENT THIS LINE
-        // 'gsaitta@eucalyptogroup.com',
+        'amartinez@eucalyptogroup.com',
+        'gsaitta@eucalyptogroup.com',
       ],
       subject: 'New Apply from an user to a jobOffer',
       template: 'newOfferApplyAdmin',
