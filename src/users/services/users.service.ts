@@ -2,15 +2,43 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CollectionReference } from '@google-cloud/firestore';
 import { CreateUserDto, GetUserDto, UpdateUserDto } from '../dtos/users.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(CreateUserDto.collectionName)
     private collection: CollectionReference<CreateUserDto>,
+    private mailService: MailService,
   ) {}
 
   async create(queryUser): Promise<any> {
+    const snapshot = await this.collection
+      .where('email', '==', queryUser.email)
+      .get();
+    if (!snapshot.empty) {
+      console.log('queryUser already exists' + queryUser.email);
+      return { alreadyExists: true };
+    }
+
+    this.mailService.sendToUserWelcomeMail({
+      displayName: queryUser.displayName,
+      email: queryUser.email,
+    });
+
+    const user: GetUserDto = {
+      ...queryUser,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const docRef = this.collection.doc();
+    await docRef.set(user);
+    const userDoc = await docRef.get();
+    return userDoc.data();
+  }
+
+  async manualCreate(queryUser): Promise<any> {
     const snapshot = await this.collection
       .where('email', '==', queryUser.email)
       .get();

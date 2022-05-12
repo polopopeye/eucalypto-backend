@@ -28,6 +28,12 @@ export class UsersController {
     return this.usersService.create(body);
   }
 
+  @Post('manual-create')
+  @ApiOperation({ summary: 'Create a new User' })
+  manualCreate(@Body() body: CreateUserDto) {
+    return this.usersService.manualCreate(body);
+  }
+
   @Get(':prop/:value')
   @ApiOperation({ summary: 'Find User by param' })
   findBy(@Param('prop') prop: string, @Param('value') value: string) {

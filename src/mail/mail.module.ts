@@ -15,11 +15,11 @@ import { MailController } from './mail.controllers';
       transport: {
         host: 'smtp.gmail.com',
         port: 465,
-        ignoreTLS: true,
         secure: true,
         auth: {
-          user: 'ksuarez@eucalyptogroup.com',
-          pass: '@ elmerca69.K',
+          // https://myaccount.google.com/security CONTRASEÑA DE APPLICACION
+          user: 'kenneth7e7a@gmail.com', // TODO: THIS SHOULD BE EDITED
+          pass: 'vtvrlkufijoanpww',
         },
       },
       defaults: {
