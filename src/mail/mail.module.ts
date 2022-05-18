@@ -18,8 +18,8 @@ import { MailController } from './mail.controllers';
         secure: true,
         auth: {
           // https://myaccount.google.com/security CONTRASEÑA DE APPLICACION
-          user: 'kenneth7e7a@gmail.com', // TODO: THIS SHOULD BE EDITED
-          pass: 'vtvrlkufijoanpww',
+          user: 'hello@eucalyptogroup.com', // TODO: THIS SHOULD BE EDITED
+          pass: 'ivycnxdwwskfirrt',
         },
       },
       defaults: {
