@@ -23,7 +23,7 @@ import { MailController } from './mail.controllers';
         },
       },
       defaults: {
-        from: '"No Reply" <noreply@eucalyptogroup.com>',
+        from: '"Eucalypto Group" <hello@eucalyptogroup.com>',
       },
       template: {
         dir: join(__dirname, 'templates'),
