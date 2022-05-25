@@ -8,8 +8,8 @@ import { CategoriesModule } from './categories/categories.modules';
 import { CompaniesModule } from './companies/companies.modules';
 import { CommunityModule } from './community/community.module';
 import { UsersModule } from './users/users.modules';
-import { StatusOffersModule } from './offers/statusJobOffers/statusOffers.modules';
 import { MailModule } from './mail/mail.module';
+import { OauthModule } from './customOauth/oauth.modules';
 
 @Module({
   imports: [
@@ -26,6 +26,7 @@ import { MailModule } from './mail/mail.module';
       }),
       inject: [ConfigService],
     }),
+    OauthModule,
     CommunityModule,
     OffersModule,
     CategoriesModule,
