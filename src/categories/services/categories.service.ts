@@ -6,12 +6,14 @@ import {
   UpdateCategoriesDto,
 } from '../dtos/categories.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { RedisProvider } from 'src/redisProvider/redis.provider';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @Inject(CreateCategoriesDto.collectionName)
     private collection: CollectionReference<CreateCategoriesDto>,
+    private redisClient: RedisProvider,
   ) {}
 
   async create(events): Promise<CreateCategoriesDto> {
@@ -24,12 +26,27 @@ export class CategoriesService {
     const docRef = this.collection.doc();
     await docRef.set(offer);
     const offerDoc = await docRef.get();
+
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     return offerDoc.data();
   }
 
   async findAll(): Promise<any[]> {
     const snapshot = await this.collection.get();
-    return getDataFromQuerySnapsshot(snapshot);
+    const tableName = this.collection.id;
+
+    const redisData = await this.redisClient.get(tableName);
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
+    }
+    console.log(tableName + ': Served from Redis');
+    return redisData;
   }
 
   async findBy(prop, value): Promise<any[]> {
@@ -74,6 +91,10 @@ export class CategoriesService {
     const docRef = await searchById();
 
     if (docRef && Object.keys(changes).length !== 0) {
+      // Delete Redis
+      const tableName = this.collection.id;
+      await this.redisClient.delete(tableName);
+
       await docRef.update(changes);
       const offerDoc = await docRef.get();
       return offerDoc.data();
@@ -83,6 +104,10 @@ export class CategoriesService {
 
   async delete(id: string): Promise<any> {
     if (id) {
+      // Delete Redis
+      const tableName = this.collection.id;
+      await this.redisClient.delete(tableName);
+
       return await this.collection.doc(id).delete();
     } else {
       return (

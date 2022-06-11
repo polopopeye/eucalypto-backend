@@ -6,16 +6,21 @@ import {
   StatusUpdateOffersDto,
 } from '../dtos/statusOffers.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
-import { MailService } from 'src/mail/mail.service';
+import { RedisProvider } from 'src/redisProvider/redis.provider';
 
 @Injectable()
 export class StatusOffersService {
   constructor(
     @Inject(CreateStatusOffersDto.collectionName)
     private collection: CollectionReference<CreateStatusOffersDto>,
+    private redisClient: RedisProvider,
   ) {}
 
   async create(Offers): Promise<CreateStatusOffersDto> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     const offer: StatusGetOffersDto = {
       ...Offers,
       createdAt: new Date(),
@@ -30,7 +35,17 @@ export class StatusOffersService {
 
   async findAll(): Promise<any[]> {
     const snapshot = await this.collection.get();
-    return getDataFromQuerySnapsshot(snapshot);
+    const tableName = this.collection.id;
+
+    const redisData = await this.redisClient.get(tableName);
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
+    }
+    console.log(tableName + ': Served from Redis');
+    return redisData;
   }
 
   async findBy(userId, jobId): Promise<any[]> {
@@ -78,6 +93,10 @@ export class StatusOffersService {
   }
 
   async update(id: string, changes: any): Promise<any> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -104,6 +123,10 @@ export class StatusOffersService {
   }
 
   async delete(id: string, idJobOffer: string): Promise<any> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     if (id && idJobOffer) {
       const snapshot = await this.collection
         .where('idUser', '==', id)
@@ -129,6 +152,10 @@ export class StatusOffersService {
   }
 
   async deleteById(id: string): Promise<any> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     if (id) {
       return await this.collection.doc(id).delete();
     } else {

@@ -6,15 +6,22 @@ import {
   UpdateOffersDto,
 } from '../dtos/offers.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { RedisProvider } from 'src/redisProvider/redis.provider';
 
 @Injectable()
 export class OffersService {
   constructor(
     @Inject(CreateOffersDto.collectionName)
     private collection: CollectionReference<CreateOffersDto>,
+    private redisClient: RedisProvider,
   ) {}
 
   async create(Offers): Promise<CreateOffersDto> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
+    // Create Offer
     const offer: GetOffersDto = {
       ...Offers,
       applicants: [],
@@ -25,12 +32,23 @@ export class OffersService {
     const docRef = this.collection.doc();
     await docRef.set(offer);
     const offerDoc = await docRef.get();
+
     return offerDoc.data();
   }
 
   async findAll(): Promise<any[]> {
     const snapshot = await this.collection.get();
-    return getDataFromQuerySnapsshot(snapshot);
+    const tableName = this.collection.id; // offers;
+
+    const redisData = await this.redisClient.get(tableName);
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
+    }
+    console.log(tableName + ': Served from Redis');
+    return redisData;
   }
 
   async findBy(prop, value): Promise<any[]> {
@@ -65,6 +83,10 @@ export class OffersService {
   }
 
   async update(id: string, changes: any): Promise<any> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -91,6 +113,10 @@ export class OffersService {
   }
 
   async delete(id: string): Promise<any> {
+    // Delete Redis
+    const tableName = this.collection.id;
+    await this.redisClient.delete(tableName);
+
     if (id) {
       return await this.collection.doc(id).delete();
     } else {
