@@ -19,7 +19,10 @@ export class StatusOffersService {
   async create(Offers): Promise<CreateStatusOffersDto> {
     // Delete Redis
     const tableName = this.collection.id;
-    await this.redisClient.delete(tableName);
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
 
     const offer: StatusGetOffersDto = {
       ...Offers,
@@ -34,12 +37,12 @@ export class StatusOffersService {
   }
 
   async findAll(): Promise<any[]> {
-    const snapshot = await this.collection.get();
     const tableName = this.collection.id;
 
     const redisData = await this.redisClient.get(tableName);
     if (!redisData) {
       console.log(tableName + ': Served from DB');
+      const snapshot = await this.collection.get();
       const data = getDataFromQuerySnapsshot(snapshot);
       if (data) this.redisClient.update(tableName, data);
       return data;
@@ -49,20 +52,30 @@ export class StatusOffersService {
   }
 
   async findBy(userId, jobId): Promise<any[]> {
-    const snapshot: any = await this.collection
-      .where('idUser', '==', userId)
-      .where('idJob', '==', jobId)
-      .get();
+    const tableName = this.collection.id + '_' + userId + '_' + jobId;
 
-    if (snapshot.empty) {
-      console.log(
-        '🚀 ~ file: statusOffers.service.ts ~ line 42 ~ StatusOffersService ~ findBy ~ snapshot.empty',
-        snapshot.empty,
-      );
+    const redisData = await this.redisClient.get(tableName);
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      const snapshot: any = await this.collection
+        .where('idUser', '==', userId)
+        .where('idJob', '==', jobId)
+        .get();
 
-      return;
+      if (snapshot.empty) {
+        console.log(
+          '🚀 ~ file: statusOffers.service.ts ~ line 42 ~ StatusOffersService ~ findBy ~ snapshot.empty',
+          snapshot.empty,
+        );
+
+        return;
+      }
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
     }
-    return getDataFromQuerySnapsshot(snapshot);
+    console.log(tableName + ': Served from Redis');
+    return redisData;
 
     // TODO SEARCH BY PROP AND VALUE - PARAMS
     // async findBy(prop, value): Promise<any[]> {
@@ -95,7 +108,10 @@ export class StatusOffersService {
   async update(id: string, changes: any): Promise<any> {
     // Delete Redis
     const tableName = this.collection.id;
-    await this.redisClient.delete(tableName);
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
 
     const searchById = async () => {
       const doc = this.collection.doc(id);
@@ -125,7 +141,10 @@ export class StatusOffersService {
   async delete(id: string, idJobOffer: string): Promise<any> {
     // Delete Redis
     const tableName = this.collection.id;
-    await this.redisClient.delete(tableName);
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
 
     if (id && idJobOffer) {
       const snapshot = await this.collection
@@ -154,7 +173,10 @@ export class StatusOffersService {
   async deleteById(id: string): Promise<any> {
     // Delete Redis
     const tableName = this.collection.id;
-    await this.redisClient.delete(tableName);
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
 
     if (id) {
       return await this.collection.doc(id).delete();

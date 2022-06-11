@@ -29,18 +29,21 @@ export class CategoriesService {
 
     // Delete Redis
     const tableName = this.collection.id;
-    await this.redisClient.delete(tableName);
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
 
     return offerDoc.data();
   }
 
   async findAll(): Promise<any[]> {
-    const snapshot = await this.collection.get();
     const tableName = this.collection.id;
 
     const redisData = await this.redisClient.get(tableName);
     if (!redisData) {
       console.log(tableName + ': Served from DB');
+      const snapshot = await this.collection.get();
       const data = getDataFromQuerySnapsshot(snapshot);
       if (data) this.redisClient.update(tableName, data);
       return data;
@@ -50,10 +53,14 @@ export class CategoriesService {
   }
 
   async findBy(prop, value): Promise<any[]> {
+    const tableName = this.collection.id + '_' + prop + '_' + value;
+
     const searchById = async () => {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
-        return { id: docRef.id, ...docRef.data() };
+        const data = { id: docRef.id, ...docRef.data() };
+        if (data) this.redisClient.update(tableName, data);
+        return data;
       } else {
         return false;
       }
@@ -67,14 +74,24 @@ export class CategoriesService {
         console.log('No matching documents.');
         return;
       }
-      return getDataFromQuerySnapsshot(snapshot);
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
     };
 
-    if (prop === 'id') {
-      return searchById();
-    } else {
-      return searchByProp();
+    const redisData = await this.redisClient.get(tableName);
+
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      if (prop === 'id') {
+        return searchById();
+      } else {
+        return searchByProp();
+      }
     }
+
+    console.log(tableName + ': Served from Redis');
+    return redisData;
   }
 
   async update(id: string, changes: UpdateCategoriesDto): Promise<any> {
@@ -93,7 +110,10 @@ export class CategoriesService {
     if (docRef && Object.keys(changes).length !== 0) {
       // Delete Redis
       const tableName = this.collection.id;
-      await this.redisClient.delete(tableName);
+      const redisKeys = await this.redisClient.getKeysInclude(tableName);
+      redisKeys.forEach(async (key) => {
+        await this.redisClient.delete(key);
+      });
 
       await docRef.update(changes);
       const offerDoc = await docRef.get();
@@ -106,7 +126,10 @@ export class CategoriesService {
     if (id) {
       // Delete Redis
       const tableName = this.collection.id;
-      await this.redisClient.delete(tableName);
+      const redisKeys = await this.redisClient.getKeysInclude(tableName);
+      redisKeys.forEach(async (key) => {
+        await this.redisClient.delete(key);
+      });
 
       return await this.collection.doc(id).delete();
     } else {

@@ -38,4 +38,28 @@ export class RedisProvider {
     console.log('Redis deleted');
     return true;
   }
+
+  async getKeys(pattern: string) {
+    const keys = await this.redisClient.keys(pattern);
+    return keys;
+  }
+
+  async getAllKeys() {
+    const keys = await this.redisClient.keys('*');
+    return keys;
+  }
+
+  async getKeysInclude(pattern: string) {
+    const keys = [];
+    const redisKeys = await this.getAllKeys();
+    redisKeys.forEach((key) => {
+      if (key.includes(pattern)) {
+        keys.push(key);
+      }
+    });
+
+    return keys;
+  }
+
+  // TODO: DELETE WITH REGEX
 }
