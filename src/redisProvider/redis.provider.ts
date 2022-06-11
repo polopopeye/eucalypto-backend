@@ -26,7 +26,7 @@ export class RedisProvider {
   }
 
   async update(key: string, value: any) {
-    const cacheTimeOut = parseInt('100');
+    const cacheTimeOut = parseInt('99999999'); // TODO: GET DATA FROM CONFIG
     const parsedRedisValue = JSON.stringify(value);
     await this.redisClient.setEx(key, cacheTimeOut, parsedRedisValue);
     console.log('Redis updated');
