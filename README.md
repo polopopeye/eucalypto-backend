@@ -1,3 +1,5 @@
+github website: api.eucalyptogroup.com
+
 ## Create new endpoint
 
 Just follow the structure of dtos, controllers, and services.
