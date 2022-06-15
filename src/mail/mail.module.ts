@@ -10,20 +10,17 @@ import { MailController } from './mail.controllers';
 @Module({
   imports: [
     MailerModule.forRoot({
-      // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
-      // or
       transport: {
         host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
-          // https://myaccount.google.com/security CONTRASEÑA DE APPLICACION
-          user: 'hello@eucalyptogroup.com', // TODO: THIS SHOULD BE EDITED
-          pass: 'ivycnxdwwskfirrt',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       },
       defaults: {
-        from: '"Eucalypto Group" <hello@eucalyptogroup.com>',
+        from: '"Eucalypto Group" <' + process.env.EMAIL_USER + '>',
       },
       template: {
         dir: join(__dirname, 'templates'),

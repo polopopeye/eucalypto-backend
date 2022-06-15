@@ -26,6 +26,7 @@ export class MailService {
       },
     });
 
+    // TODO: CHANGE THIS TO ENV VAR OR DB CALL TO GET EMAIL ADDRESS
     // SEND EMAIL TO HEADHUNTERS
     await this.mailerService.sendMail({
       to: [

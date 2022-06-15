@@ -1,20 +1,16 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dtos/users.dtos';
 import { CreateOffersDto } from 'src/offers/dtos/offers.dtos';
 import { MailService } from './mail.service';
+import config from 'src/config';
+import { ConfigType } from '@nestjs/config';
 
 @ApiTags('Mail Service')
 @Controller('mail')
 export class MailController {
+  private configuration: ConfigType<typeof config> = config();
+
   constructor(private mailService: MailService) {}
 
   @Post('sendToUserAppliedOk')
@@ -26,7 +22,7 @@ export class MailController {
       { displayName: user.displayName, email: user.email },
       {
         job: jobOffer.job,
-        url: 'http://www.eucalyptogroup.com/job/' + jobOffer.id,
+        url: this.configuration.front.host + '/job/' + jobOffer.id,
       },
     );
   }
@@ -59,7 +55,7 @@ export class MailController {
       },
       {
         job: jobOffer.job,
-        url: 'http://www.eucalyptogroup.com/job/' + jobOffer.id,
+        url: this.configuration.front.host + '/job/' + jobOffer.id,
       },
       statusDescription,
     );

@@ -5,7 +5,6 @@ import { UsersController } from './controllers/users.controllers';
 import { UsersService } from './services/users.service';
 
 @Module({
-  imports: [],
   controllers: [UsersController],
   providers: [UsersService, MailService, RedisProvider],
   exports: [],

@@ -10,12 +10,26 @@ import { CommunityModule } from './community/community.module';
 import { UsersModule } from './users/users.modules';
 import { MailModule } from './mail/mail.module';
 import { OauthModule } from './customOauth/oauth.modules';
+import config from './config';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: '.env',
+      load: [config],
       isGlobal: true,
+      validationSchema: Joi.object({
+        GOOGLE_PROJECT_ID: Joi.string().required(),
+        GOOGLE_APPLICATION_CREDENTIALS: Joi.string().required(),
+        REDIS_URL: Joi.string().required(),
+        REDIS_CACHE_TIME_SECONDS: Joi.number().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASS: Joi.string().required(),
+        FRONT_HOST: Joi.string().required(),
+      }),
     }),
+
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
