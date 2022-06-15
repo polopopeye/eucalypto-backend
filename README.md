@@ -1,4 +1,4 @@
-github website: api.eucalyptogroup.com
+github website: [api.eucalyptogroup.com](https://api.eucalyptogroup.com/)
 
 ## Create new endpoint
 
