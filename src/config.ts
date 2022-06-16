@@ -17,5 +17,9 @@ export default registerAs('config', () => {
     front: {
       host: process.env.FRONT_HOST,
     },
+    linkedin: {
+      clientID: process.env.LINKEDIN_CLIENT_ID,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+    },
   };
 });

@@ -1,17 +1,17 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import axios from 'axios';
+import config from 'src/config';
 
 @Injectable()
 export class OauthService {
+  private configuration: ConfigType<typeof config> = config();
+
   async linkedInOauth(body: any): Promise<any> {
     const { authCode, uri } = body;
-    console.log(
-      '🚀 ~ file: oauth.service.ts ~ line 8 ~ OauthService ~ linkedInOauth ~ authCode',
-      authCode,
-    );
 
-    const client_id = '78pctji9v7v9at';
-    const client_secret = 'l4MIWCdavd2KcE49';
+    const client_id = this.configuration.linkedin.clientID;
+    const client_secret = this.configuration.linkedin.clientSecret;
 
     const response = {
       email: {},
@@ -49,11 +49,6 @@ export class OauthService {
             .then((res) => {
               response.email = res.data;
 
-              console.log(
-                '🚀 ~ file: oauth.service.ts ~ line 50 ~ OauthService ~ .then ~ res.data',
-                res.data,
-              );
-
               return res.data;
             })
             .catch((err) => {
@@ -71,10 +66,6 @@ export class OauthService {
             })
             .then((res) => {
               response.profile = res.data;
-              console.log(
-                '🚀 ~ file: oauth.service.ts ~ line 50 ~ OauthService ~ .then ~ res.data',
-                res.data,
-              );
 
               return res.data;
             })

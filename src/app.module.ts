@@ -27,6 +27,8 @@ import * as Joi from 'joi';
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASS: Joi.string().required(),
         FRONT_HOST: Joi.string().required(),
+        LINKEDIN_CLIENT_ID: Joi.string().required(),
+        LINKEDIN_CLIENT_SECRET: Joi.string().required(),
       }),
     }),
 
