@@ -4,7 +4,10 @@ export default registerAs('config', () => {
   return {
     google: {
       projectID: process.env.GOOGLE_PROJECT_ID,
-      credFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY,
+      },
     },
     redis: {
       url: process.env.REDIS_URL,

@@ -21,7 +21,8 @@ import * as Joi from 'joi';
       isGlobal: true,
       validationSchema: Joi.object({
         GOOGLE_PROJECT_ID: Joi.string().required(),
-        GOOGLE_APPLICATION_CREDENTIALS: Joi.string().required(),
+        GOOGLE_CLIENT_EMAIL: Joi.string().required(),
+        GOOGLE_PRIVATE_KEY: Joi.string().required(),
         REDIS_URL: Joi.string().required(),
         REDIS_CACHE_TIME_SECONDS: Joi.number().required(),
         EMAIL_USER: Joi.string().required(),
@@ -36,9 +37,10 @@ import * as Joi from 'joi';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         projectId: configService.get<string>('GOOGLE_PROJECT_ID'),
-        keyFilename: configService.get<string>(
-          'GOOGLE_APPLICATION_CREDENTIALS',
-        ),
+        credentials: {
+          client_email: configService.get<string>('GOOGLE_CLIENT_EMAIL'),
+          private_key: configService.get<string>('GOOGLE_PRIVATE_KEY'),
+        },
       }),
       inject: [ConfigService],
     }),
