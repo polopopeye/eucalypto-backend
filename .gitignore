@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+dist/*
+dist
 
 # Logs
 logs
@@ -38,3 +40,4 @@ lerna-debug.log*
 
 gcred.json
 .env
+
