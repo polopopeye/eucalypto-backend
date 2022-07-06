@@ -25,7 +25,7 @@ export class CategoriesController {
   findAll() {
     return this.categoriesService.findAll();
   }
-  @Get()
+  @Get('/parent')
   @ApiOperation({ summary: 'List all the Parents categories' })
   findAllParent() {
     return this.categoriesService.findAllParent();
@@ -37,7 +37,7 @@ export class CategoriesController {
     return this.categoriesService.create(body);
   }
 
-  @Post()
+  @Post('/parent')
   @ApiOperation({ summary: 'Create a new parent category' })
   createParent(@Body() body: ParentCategoryDto) {
     return this.categoriesService.createParent(body);
@@ -61,7 +61,7 @@ export class CategoriesController {
     return this.categoriesService.delete(id);
   }
 
-  @Delete(':id')
+  @Delete('parent/:id')
   @ApiOperation({ summary: 'Delete  Parent Category' })
   deleteParent(@Param('id') id: string) {
     return this.categoriesService.deleteParent(id);
