@@ -39,7 +39,9 @@ import * as Joi from 'joi';
         projectId: configService.get<string>('GOOGLE_PROJECT_ID'),
         credentials: {
           client_email: configService.get<string>('GOOGLE_CLIENT_EMAIL'),
-          private_key: configService.get<string>('GOOGLE_PRIVATE_KEY'),
+          private_key: decodeURIComponent(
+            configService.get<string>('GOOGLE_PRIVATE_KEY'),
+          ),
         },
       }),
       inject: [ConfigService],
