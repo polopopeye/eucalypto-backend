@@ -2,7 +2,7 @@
 /dist
 /node_modules
 dist/*
-dist
+dist/
 
 # Logs
 logs
@@ -41,3 +41,4 @@ lerna-debug.log*
 gcred.json
 .env
 
+dist/app.module.d.ts
