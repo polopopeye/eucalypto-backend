@@ -2,6 +2,21 @@ import { Timestamp } from '@google-cloud/firestore';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsEmpty } from 'class-validator';
 
+export class ParentCategoryDto {
+  static collectionName = 'parentCategory';
+
+  @IsOptional()
+  id: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ description: `Name of the parent category` })
+  name: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ description: `Type of the parent category` })
+  type: string;
+}
+
 export class CreateCategoriesDto {
   static collectionName = 'categories';
 
@@ -9,7 +24,7 @@ export class CreateCategoriesDto {
   id: string;
 
   @IsNotEmpty()
-  @ApiProperty({ description: `Name of the category` })
+  @ApiProperty({ description: `Name of the child category` })
   name: string;
 
   @IsNotEmpty()

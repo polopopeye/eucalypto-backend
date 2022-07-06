@@ -13,6 +13,7 @@ exports.FirestoreOptionsProvider = 'firestoreOptions';
 exports.FirestoreCollectionProviders = [
     offers_dtos_1.CreateOffersDto.collectionName,
     events_dtos_1.CreateEventsDto.collectionName,
+    categories_dtos_1.ParentCategoryDto.collectionName,
     categories_dtos_1.CreateCategoriesDto.collectionName,
     companies_dtos_1.CreateCompanyDto.collectionName,
     articles_dtos_1.CreateArticlesDto.collectionName,

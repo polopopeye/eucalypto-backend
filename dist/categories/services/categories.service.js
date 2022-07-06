@@ -19,8 +19,9 @@ const categories_dtos_1 = require("../dtos/categories.dtos");
 const getDataFromQuerySnapsshot_1 = require("../../utils/getDataFromQuerySnapsshot");
 const redis_provider_1 = require("../../redisProvider/redis.provider");
 let CategoriesService = class CategoriesService {
-    constructor(collection, redisClient) {
+    constructor(collection, parentCollection, redisClient) {
         this.collection = collection;
+        this.parentCollection = parentCollection;
         this.redisClient = redisClient;
     }
     async create(events) {
@@ -35,12 +36,37 @@ let CategoriesService = class CategoriesService {
         });
         return offerDoc.data();
     }
+    async createParent(parentCat) {
+        const docRef = this.parentCollection.doc();
+        await docRef.set(parentCat);
+        const offerDoc = await docRef.get();
+        const tableName = this.parentCollection.id;
+        const redisKeys = await this.redisClient.getKeysInclude(tableName);
+        redisKeys.forEach(async (key) => {
+            await this.redisClient.delete(key);
+        });
+        return offerDoc.data();
+    }
     async findAll() {
         const tableName = this.collection.id;
         const redisData = await this.redisClient.get(tableName);
         if (!redisData) {
             console.log(tableName + ': Served from DB');
             const snapshot = await this.collection.get();
+            const data = (0, getDataFromQuerySnapsshot_1.default)(snapshot);
+            if (data)
+                this.redisClient.update(tableName, data);
+            return data;
+        }
+        console.log(tableName + ': Served from Redis');
+        return redisData;
+    }
+    async findAllParent() {
+        const tableName = this.parentCollection.id;
+        const redisData = await this.redisClient.get(tableName);
+        if (!redisData) {
+            console.log(tableName + ': Served from DB');
+            const snapshot = await this.parentCollection.get();
             const data = (0, getDataFromQuerySnapsshot_1.default)(snapshot);
             if (data)
                 this.redisClient.update(tableName, data);
@@ -126,11 +152,27 @@ let CategoriesService = class CategoriesService {
                 id);
         }
     }
+    async deleteParent(id) {
+        if (id) {
+            const tableName = this.parentCollection.id;
+            const redisKeys = await this.redisClient.getKeysInclude(tableName);
+            redisKeys.forEach(async (key) => {
+                await this.redisClient.delete(key);
+            });
+            return await this.parentCollection.doc(id).delete();
+        }
+        else {
+            return ('🚀 ~ file: offers.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
+                id);
+        }
+    }
 };
 CategoriesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(categories_dtos_1.CreateCategoriesDto.collectionName)),
+    __param(1, (0, common_1.Inject)(categories_dtos_1.ParentCategoryDto.collectionName)),
     __metadata("design:paramtypes", [firestore_1.CollectionReference,
+        firestore_1.CollectionReference,
         redis_provider_1.RedisProvider])
 ], CategoriesService);
 exports.CategoriesService = CategoriesService;

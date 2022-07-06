@@ -9,10 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateCategoriesDto = exports.GetCategoriesDto = exports.CreateCategoriesDto = void 0;
+exports.UpdateCategoriesDto = exports.GetCategoriesDto = exports.CreateCategoriesDto = exports.ParentCategoryDto = void 0;
 const firestore_1 = require("@google-cloud/firestore");
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+class ParentCategoryDto {
+}
+ParentCategoryDto.collectionName = 'parentCategory';
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], ParentCategoryDto.prototype, "id", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({ description: `Name of the parent category` }),
+    __metadata("design:type", String)
+], ParentCategoryDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({ description: `Type of the parent category` }),
+    __metadata("design:type", String)
+], ParentCategoryDto.prototype, "type", void 0);
+exports.ParentCategoryDto = ParentCategoryDto;
 class CreateCategoriesDto {
 }
 CreateCategoriesDto.collectionName = 'categories';
@@ -22,7 +40,7 @@ __decorate([
 ], CreateCategoriesDto.prototype, "id", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, swagger_1.ApiProperty)({ description: `Name of the category` }),
+    (0, swagger_1.ApiProperty)({ description: `Name of the child category` }),
     __metadata("design:type", String)
 ], CreateCategoriesDto.prototype, "name", void 0);
 __decorate([

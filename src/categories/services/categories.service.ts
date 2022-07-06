@@ -3,6 +3,7 @@ import { CollectionReference } from '@google-cloud/firestore';
 import {
   CreateCategoriesDto,
   GetCategoriesDto,
+  ParentCategoryDto,
   UpdateCategoriesDto,
 } from '../dtos/categories.dtos';
 import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
@@ -13,6 +14,8 @@ export class CategoriesService {
   constructor(
     @Inject(CreateCategoriesDto.collectionName)
     private collection: CollectionReference<CreateCategoriesDto>,
+    @Inject(ParentCategoryDto.collectionName)
+    private parentCollection: CollectionReference<ParentCategoryDto>,
     private redisClient: RedisProvider,
   ) {}
 
@@ -37,6 +40,21 @@ export class CategoriesService {
     return offerDoc.data();
   }
 
+  async createParent(parentCat): Promise<ParentCategoryDto> {
+    const docRef = this.parentCollection.doc();
+    await docRef.set(parentCat);
+    const offerDoc = await docRef.get();
+
+    // Delete Redis
+    const tableName = this.parentCollection.id;
+    const redisKeys = await this.redisClient.getKeysInclude(tableName);
+    redisKeys.forEach(async (key) => {
+      await this.redisClient.delete(key);
+    });
+
+    return offerDoc.data();
+  }
+
   async findAll(): Promise<any[]> {
     const tableName = this.collection.id;
 
@@ -44,6 +62,21 @@ export class CategoriesService {
     if (!redisData) {
       console.log(tableName + ': Served from DB');
       const snapshot = await this.collection.get();
+      const data = getDataFromQuerySnapsshot(snapshot);
+      if (data) this.redisClient.update(tableName, data);
+      return data;
+    }
+    console.log(tableName + ': Served from Redis');
+    return redisData;
+  }
+
+  async findAllParent(): Promise<any[]> {
+    const tableName = this.parentCollection.id;
+
+    const redisData = await this.redisClient.get(tableName);
+    if (!redisData) {
+      console.log(tableName + ': Served from DB');
+      const snapshot = await this.parentCollection.get();
       const data = getDataFromQuerySnapsshot(snapshot);
       if (data) this.redisClient.update(tableName, data);
       return data;
@@ -132,6 +165,24 @@ export class CategoriesService {
       });
 
       return await this.collection.doc(id).delete();
+    } else {
+      return (
+        '🚀 ~ file: offers.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +
+        id
+      );
+    }
+  }
+
+  async deleteParent(id: string): Promise<any> {
+    if (id) {
+      // Delete Redis
+      const tableName = this.parentCollection.id;
+      const redisKeys = await this.redisClient.getKeysInclude(tableName);
+      redisKeys.forEach(async (key) => {
+        await this.redisClient.delete(key);
+      });
+
+      return await this.parentCollection.doc(id).delete();
     } else {
       return (
         '🚀 ~ file: offers.service.ts ~ line 92 ~ EventsService ~ delete ~ id' +

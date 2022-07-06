@@ -24,8 +24,14 @@ let CategoriesController = class CategoriesController {
     findAll() {
         return this.categoriesService.findAll();
     }
+    findAllParent() {
+        return this.categoriesService.findAllParent();
+    }
     create(body) {
         return this.categoriesService.create(body);
+    }
+    createParent(body) {
+        return this.categoriesService.createParent(body);
     }
     findBy(prop, value) {
         return this.categoriesService.findBy(prop, value);
@@ -36,25 +42,43 @@ let CategoriesController = class CategoriesController {
     delete(id) {
         return this.categoriesService.delete(id);
     }
+    deleteParent(id) {
+        return this.categoriesService.deleteParent(id);
+    }
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'List all the categories' }),
+    (0, swagger_1.ApiOperation)({ summary: 'List all the childs categories' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'List all the Parents categories' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], CategoriesController.prototype, "findAllParent", null);
+__decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Create a new event' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new child category' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [categories_dtos_1.CreateCategoriesDto]),
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "create", null);
 __decorate([
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new parent category' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [categories_dtos_1.ParentCategoryDto]),
+    __metadata("design:returntype", void 0)
+], CategoriesController.prototype, "createParent", null);
+__decorate([
     (0, common_1.Get)(':prop/:value'),
-    (0, swagger_1.ApiOperation)({ summary: 'Find Event by param' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Find Child Category by param' }),
     __param(0, (0, common_1.Param)('prop')),
     __param(1, (0, common_1.Param)('value')),
     __metadata("design:type", Function),
@@ -63,7 +87,7 @@ __decorate([
 ], CategoriesController.prototype, "findBy", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Update Event' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update Child Category' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -72,12 +96,20 @@ __decorate([
 ], CategoriesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Delete  Event' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete Child Category' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete  Parent Category' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CategoriesController.prototype, "deleteParent", null);
 CategoriesController = __decorate([
     (0, swagger_1.ApiTags)('Categories'),
     (0, common_1.Controller)('categories'),

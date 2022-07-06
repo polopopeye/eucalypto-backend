@@ -1,4 +1,7 @@
-import { CreateCategoriesDto } from 'src/categories/dtos/categories.dtos';
+import {
+  CreateCategoriesDto,
+  ParentCategoryDto,
+} from 'src/categories/dtos/categories.dtos';
 import { CreateCompanyDto } from 'src/companies/dtos/companies.dtos';
 import { CreateEventsDto } from 'src/community/events/dtos/events.dtos';
 import { CreateOffersDto } from 'src/offers/dtos/offers.dtos';
@@ -12,6 +15,7 @@ export const FirestoreOptionsProvider = 'firestoreOptions';
 export const FirestoreCollectionProviders: string[] = [
   CreateOffersDto.collectionName,
   CreateEventsDto.collectionName,
+  ParentCategoryDto.collectionName,
   CreateCategoriesDto.collectionName,
   CreateCompanyDto.collectionName,
   CreateArticlesDto.collectionName,
