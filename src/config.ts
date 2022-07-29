@@ -11,6 +11,9 @@ export default registerAs('config', () => {
     },
     redis: {
       url: process.env.REDIS_URL,
+      url1: process.env.REDIS_URL1,
+      url2: process.env.REDIS_URL2,
+      url3: process.env.REDIS_URL3,
       cacheTimeOut: process.env.REDIS_CACHE_TIME_SECONDS,
     },
     email: {

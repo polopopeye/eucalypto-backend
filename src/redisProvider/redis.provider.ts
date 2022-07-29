@@ -5,21 +5,30 @@ import { createClient } from 'redis';
 import config from 'src/config';
 // import config from '../config';
 
-//TODO: GET REDIS CONF FROM ENV
 @Injectable()
 export class RedisProvider {
   private configuration: ConfigType<typeof config> = config();
+  private RandomNumber: number = Math.floor(Math.random() * 4); // GET RANDOM number from 0 to 3
+  private redisUrls: string[] = [
+    this.configuration.redis.url,
+    this.configuration.redis.url1,
+    this.configuration.redis.url2,
+    this.configuration.redis.url3,
+  ];
 
   private readonly redisClient = createClient({
-    url: this.configuration.redis.url,
+    url: this.redisUrls[this.RandomNumber],
   });
 
   constructor() {
     this.redisClient.connect();
-    this.redisClient.on('error', (err) =>
-      console.log('Redis Client Error', err),
-    );
-    this.redisClient.on('connect', () => console.log('Redis Client Connected'));
+    this.redisClient.on('error', (err) => {
+      console.log('Redis Client Error', err);
+      this.redisClient.disconnect();
+    });
+    this.redisClient.on('connect', () => {
+      console.log('Redis Client Connected to: ' + this.RandomNumber);
+    });
   }
 
   async get(key: string) {
