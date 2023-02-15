@@ -9,6 +9,11 @@ If you have everything the last thing is to include the collection name in the f
 
 ## Deploy
 
+Add heroku remote:
+
+git remote add heroku https://git.heroku.com/stage-back-eucalypto.git
+
+
 heroku login => eucalypto account
 
 => https://devcenter.heroku.com/articles/git

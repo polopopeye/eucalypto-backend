@@ -35,8 +35,9 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.history/*
 .env
- 
+
 
 gcred.json
 .env
