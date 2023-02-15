@@ -1,12 +1,11 @@
-import { Injectable, Inject } from '@nestjs/common';
 import { CollectionReference } from '@google-cloud/firestore';
+import { Inject, Injectable } from '@nestjs/common';
+import { RedisProvider } from 'src/redisProvider/redis.provider';
+import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
 import {
   CreateStatusOffersDto,
   StatusGetOffersDto,
-  StatusUpdateOffersDto,
 } from '../dtos/statusOffers.dtos';
-import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
-import { RedisProvider } from 'src/redisProvider/redis.provider';
 
 @Injectable()
 export class StatusOffersService {
@@ -39,80 +38,30 @@ export class StatusOffersService {
   async findAll(): Promise<any[]> {
     const tableName = this.collection.id;
 
-    const redisData = await this.redisClient.get(tableName);
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot = await this.collection.get();
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
-    }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
+    console.log(tableName + ': Served from DB');
+    const snapshot = await this.collection.get();
+    const data = getDataFromQuerySnapsshot(snapshot);
+
+    return data;
   }
 
   async findBy(userId, jobId): Promise<any[]> {
-    const tableName = this.collection.id + '_' + userId + '_' + jobId;
+    const snapshot: any = await this.collection
+      .where('idUser', '==', userId)
+      .where('idJob', '==', jobId)
+      .get();
 
-    const redisData = await this.redisClient.get(tableName);
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot: any = await this.collection
-        .where('idUser', '==', userId)
-        .where('idJob', '==', jobId)
-        .get();
+    if (snapshot.empty) {
+      console.log(
+        '🚀 ~ file: statusOffers.service.ts ~ line 42 ~ StatusOffersService ~ findBy ~ snapshot.empty',
+        snapshot.empty,
+      );
 
-      if (snapshot.empty) {
-        console.log(
-          '🚀 ~ file: statusOffers.service.ts ~ line 42 ~ StatusOffersService ~ findBy ~ snapshot.empty',
-          snapshot.empty,
-        );
-
-        return;
-      }
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
+      return;
     }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
-
-    // TODO SEARCH BY PROP AND VALUE - PARAMS
-    // async findBy(prop, value): Promise<any[]> {
-    //   const searchById = async () => {
-    //     const docRef: any = await this.collection.doc(value).get();
-    //     if (docRef.exists) {
-    //       return { id: docRef.id, ...docRef.data() };
-    //     } else {
-    //       return false;
-    //     }
-    //   };
-    // const searchByProp = async () => {
-    //   value = value === 'true' ? true : value;
-
-    //   const snapshot = await this.collection.where(prop, '==', value).get();
-    //   if (snapshot.empty) {
-    //     console.log('No matching documents.');
-    //     return;
-    //   }
-    //   return getDataFromQuerySnapsshot(snapshot);
-    // };
-
-    // if (prop === 'id') {
-    //   return searchById();
-    // } else {
-    //   return searchByProp();
-    // }
   }
 
   async update(id: string, changes: any): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -139,13 +88,6 @@ export class StatusOffersService {
   }
 
   async delete(id: string, idJobOffer: string): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     if (id && idJobOffer) {
       const snapshot = await this.collection
         .where('idUser', '==', id)
@@ -171,13 +113,6 @@ export class StatusOffersService {
   }
 
   async deleteById(id: string): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     if (id) {
       return await this.collection.doc(id).delete();
     } else {

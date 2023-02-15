@@ -27,29 +27,16 @@ export class CompaniesService {
     await docRef.set(offer);
     const offerDoc = await docRef.get();
 
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     return offerDoc.data();
   }
 
   async findAll(): Promise<any[]> {
     const tableName = this.collection.id; // offers;
 
-    const redisData = await this.redisClient.get(tableName);
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot = await this.collection.get();
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
-    }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
+    console.log(tableName + ': Served from DB');
+    const snapshot = await this.collection.get();
+    const data = getDataFromQuerySnapsshot(snapshot);
+    return data;
   }
 
   async findBy(prop, value): Promise<any[]> {
@@ -59,7 +46,6 @@ export class CompaniesService {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
         const data = { id: docRef.id, ...docRef.data() };
-        if (data) this.redisClient.update(tableName, data);
         return data;
       } else {
         return false;
@@ -75,43 +61,30 @@ export class CompaniesService {
         return;
       }
       const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
       return data;
     };
 
-    const redisData = await this.redisClient.get(tableName);
-
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      if (prop === 'id') {
-        return searchById();
-      } else {
-        return searchByProp();
-      }
+    console.log(tableName + ': Served from DB');
+    if (prop === 'id') {
+      return searchById();
+    } else {
+      return searchByProp();
     }
-
-    console.log(tableName + ': Served from Redis');
-    return redisData;
   }
 
   async findByOwner(id: string): Promise<any> {
     const tableName = this.collection.id + '_owner_' + id;
-    const redisData = await this.redisClient.get(tableName);
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot = await this.collection
-        .where('owners', 'array-contains', id)
-        .get();
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
+
+    console.log(tableName + ': Served from DB');
+    const snapshot = await this.collection
+      .where('owners', 'array-contains', id)
+      .get();
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return;
     }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
+    const data = getDataFromQuerySnapsshot(snapshot);
+    return data;
   }
 
   async update(id: string, changes: UpdateCompanyDto): Promise<any> {
@@ -128,13 +101,6 @@ export class CompaniesService {
     const docRef = await searchById();
 
     if (docRef && Object.keys(changes).length !== 0) {
-      // Delete Redis
-      const tableName = this.collection.id;
-      const redisKeys = await this.redisClient.getKeysInclude(tableName);
-      redisKeys.forEach(async (key) => {
-        await this.redisClient.delete(key);
-      });
-
       await docRef.update(changes);
       const offerDoc = await docRef.get();
       return offerDoc.data();
@@ -144,13 +110,6 @@ export class CompaniesService {
 
   async delete(id: string): Promise<any> {
     if (id) {
-      // Delete Redis
-      const tableName = this.collection.id;
-      const redisKeys = await this.redisClient.getKeysInclude(tableName);
-      redisKeys.forEach(async (key) => {
-        await this.redisClient.delete(key);
-      });
-
       return await this.collection.doc(id).delete();
     } else {
       return (

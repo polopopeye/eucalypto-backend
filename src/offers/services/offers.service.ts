@@ -1,12 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
 import { CollectionReference } from '@google-cloud/firestore';
-import {
-  CreateOffersDto,
-  GetOffersDto,
-  UpdateOffersDto,
-} from '../dtos/offers.dtos';
-import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { Inject, Injectable } from '@nestjs/common';
 import { RedisProvider } from 'src/redisProvider/redis.provider';
+import getDataFromQuerySnapsshot from 'src/utils/getDataFromQuerySnapsshot';
+import { CreateOffersDto, GetOffersDto } from '../dtos/offers.dtos';
 
 @Injectable()
 export class OffersService {
@@ -41,16 +37,11 @@ export class OffersService {
   async findAll(): Promise<any[]> {
     const tableName = this.collection.id; // offers;
 
-    const redisData = await this.redisClient.get(tableName);
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot = await this.collection.get();
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
-    }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
+    console.log(tableName + ': Served from DB');
+    const snapshot = await this.collection.get();
+    const data = getDataFromQuerySnapsshot(snapshot);
+
+    return data;
   }
 
   async findBy(prop, value): Promise<any[]> {
@@ -60,7 +51,7 @@ export class OffersService {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
         const data = { id: docRef.id, ...docRef.data() };
-        if (data) this.redisClient.update(tableName, data);
+
         return data;
       } else {
         return false;
@@ -79,33 +70,19 @@ export class OffersService {
         return;
       }
       const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
+
       return data;
     };
 
-    const redisData = await this.redisClient.get(tableName);
-
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      if (prop === 'id') {
-        return searchById();
-      } else {
-        return searchByProp();
-      }
+    console.log(tableName + ': Served from DB');
+    if (prop === 'id') {
+      return searchById();
+    } else {
+      return searchByProp();
     }
-
-    console.log(tableName + ': Served from Redis');
-    return redisData;
   }
 
   async update(id: string, changes: any): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -132,13 +109,6 @@ export class OffersService {
   }
 
   async delete(id: string): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     if (id) {
       return await this.collection.doc(id).delete();
     } else {

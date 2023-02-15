@@ -15,12 +15,6 @@ export class UsersService {
   ) {}
 
   async create(queryUser): Promise<any> {
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     const snapshot = await this.collection
       .where('email', '==', queryUser.email)
       .get();
@@ -47,12 +41,6 @@ export class UsersService {
   }
 
   async manualCreate(queryUser): Promise<any> {
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     const snapshot = await this.collection
       .where('email', '==', queryUser.email)
       .get();
@@ -74,18 +62,10 @@ export class UsersService {
   }
 
   async findAll(): Promise<any[]> {
-    const tableName = this.collection.id;
-    const redisData = await this.redisClient.get(tableName);
+    const snapshot = await this.collection.get();
+    const data = getDataFromQuerySnapsshot(snapshot);
 
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      const snapshot = await this.collection.get();
-      const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
-      return data;
-    }
-    console.log(tableName + ': Served from Redis');
-    return redisData;
+    return data;
   }
 
   async findBy(prop, value): Promise<any[]> {
@@ -95,7 +75,7 @@ export class UsersService {
       const docRef: any = await this.collection.doc(value).get();
       if (docRef.exists) {
         const data = { id: docRef.id, ...docRef.data() };
-        if (data) this.redisClient.update(tableName, data);
+
         return data;
       } else {
         return false;
@@ -111,33 +91,19 @@ export class UsersService {
         return;
       }
       const data = getDataFromQuerySnapsshot(snapshot);
-      if (data) this.redisClient.update(tableName, data);
+
       return data;
     };
 
-    const redisData = await this.redisClient.get(tableName);
-
-    if (!redisData) {
-      console.log(tableName + ': Served from DB');
-      if (prop === 'id') {
-        return searchById();
-      } else {
-        return searchByProp();
-      }
+    console.log(tableName + ': Served from DB');
+    if (prop === 'id') {
+      return searchById();
+    } else {
+      return searchByProp();
     }
-
-    console.log(tableName + ': Served from Redis');
-    return redisData;
   }
 
   async update(id: string, changes: any): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     const searchById = async () => {
       const doc = this.collection.doc(id);
       const docRef: any = await doc.get();
@@ -172,13 +138,6 @@ export class UsersService {
   }
 
   async delete(id: string): Promise<any> {
-    // Delete Redis
-    const tableName = this.collection.id;
-    const redisKeys = await this.redisClient.getKeysInclude(tableName);
-    redisKeys.forEach(async (key) => {
-      await this.redisClient.delete(key);
-    });
-
     if (id) {
       return await this.collection.doc(id).delete();
     } else {
